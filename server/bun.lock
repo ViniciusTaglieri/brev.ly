@@ -11,7 +11,7 @@
         "drizzle-orm": "^0.45.2",
         "fastify": "^5.11.0",
         "fastify-type-provider-zod": "^7.0.0",
-        "postgres": "^0.0.1",
+        "postgres": "^3.4.9",
         "zod": "^4.4.3",
       },
       "devDependencies": {
@@ -360,7 +360,7 @@
 
     "postcss-load-config": ["postcss-load-config@6.0.1", "", { "dependencies": { "lilconfig": "^3.1.1" }, "peerDependencies": { "jiti": ">=1.21.0", "postcss": ">=8.0.9", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["jiti", "postcss", "tsx", "yaml"] }, "sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g=="],
 
-    "postgres": ["postgres@0.0.1", "", {}, "sha512-QxFFD2rCs06M2zxu/mflP5vguu1XYy/A9qcifRsQPUiOdB0thkAR2kE3ET8GvCh+kiUaJL1gCgvvE/ZU3a/XGw=="],
+    "postgres": ["postgres@3.4.9", "", {}, "sha512-GD3qdB0x1z9xgFI6cdRD6xu2Sp2WCOEoe3mtnyB5Ee0XrrL5Pe+e4CCnJrRMnL1zYtRDZmQQVbvOttLnKDLnaw=="],
 
     "process-warning": ["process-warning@5.1.0", "", {}, "sha512-jQSaVHsPgtyw60e1rQ/A+/ArPEj/S8pS/vFnyGa/gYFXrKk/6RuDkoqVDQ5NI5MmS01698ltlAk0NoDBNLujRw=="],
 

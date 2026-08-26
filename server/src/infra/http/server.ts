@@ -1,14 +1,22 @@
+import { env } from "@/env";
 import { fastifyCors } from "@fastify/cors";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { fastify } from "fastify";
 import {
   hasZodFastifySchemaValidationErrors,
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
+  type ZodTypeProvider,
 } from "fastify-type-provider-zod";
+import { deleteUrlRoute } from "./routes/delete-url";
+import { exportUrlsRoute } from "./routes/export-urls";
+import { getUrlsRoute } from "./routes/get-urls";
+import { getOriginalUrlRoute } from "./routes/get-original-url";
+import { saveUrlRoute } from "./routes/save-url";
 
-const server = fastify();
+const server = fastify().withTypeProvider<ZodTypeProvider>();
 
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
@@ -16,7 +24,7 @@ server.setSerializerCompiler(serializerCompiler);
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
     return reply.status(400).send({
-      message: "Validation error",
+      message: `Validation error: ${error.message}`,
       issues: error.validation,
     });
   }
@@ -31,16 +39,23 @@ server.register(fastifyCors, { origin: "*" });
 server.register(fastifySwagger, {
   openapi: {
     info: {
-      title: "Upload Server",
+      title: "URL Shortener API",
       version: "1.0.0",
     },
   },
+  transform: jsonSchemaTransform,
 });
 
 server.register(fastifySwaggerUi, {
   routePrefix: "/docs",
 });
 
-server.listen({ port: 3333, host: "0.0.0.0" }).then((address) => {
+server.register(getUrlsRoute);
+server.register(saveUrlRoute);
+server.register(deleteUrlRoute);
+server.register(exportUrlsRoute);
+server.register(getOriginalUrlRoute);
+
+server.listen({ port: env.PORT, host: "0.0.0.0" }).then((address) => {
   console.log(`HTTP Server running! ${address}`);
 });

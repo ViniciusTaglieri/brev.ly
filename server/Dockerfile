@@ -1,21 +1,25 @@
 FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
-FROM base AS dependencies
+FROM base AS deps
 COPY package.json bun.lock ./
-RUN bun install
+RUN bun install --frozen-lockfile
 
 FROM base AS build
-WORKDIR /usr/src/app
+COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
-COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 RUN bun run build
+
+FROM base AS production-deps
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
 
 FROM oven/bun:1-alpine AS deploy
 WORKDIR /usr/src/app
+
+COPY package.json ./
+COPY --from=production-deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
-COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/package.json ./package.json
 
 USER bun
 EXPOSE 3333

@@ -12,8 +12,8 @@ import {
 } from "fastify-type-provider-zod";
 import { deleteUrlRoute } from "./routes/delete-url";
 import { exportUrlsRoute } from "./routes/export-urls";
-import { getUrlsRoute } from "./routes/get-urls";
 import { getOriginalUrlRoute } from "./routes/get-original-url";
+import { getUrlsRoute } from "./routes/get-urls";
 import { saveUrlRoute } from "./routes/save-url";
 
 const server = fastify().withTypeProvider<ZodTypeProvider>();
@@ -34,7 +34,10 @@ server.setErrorHandler((error, request, reply) => {
   return reply.status(500).send({ message: "Internal server error." });
 });
 
-server.register(fastifyCors, { origin: "*" });
+server.register(fastifyCors, {
+  origin: true,
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+});
 
 server.register(fastifySwagger, {
   openapi: {
